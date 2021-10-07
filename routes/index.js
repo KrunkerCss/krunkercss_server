@@ -3,9 +3,7 @@ const { jwt_check } = require("../middlewares/auth");
 const { allowAll } = require("../middlewares/role");
 const { HandleError } = require("../utils/error");
 
-const authRoutes = require("./auth");
-
-router.use("/", authRoutes);
+router.use("/", require("./auth"));
 
 router.get("/", (req, res) => {
   try {
