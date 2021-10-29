@@ -1,4 +1,4 @@
-const dry = require("express-dry");
+const dry = require("@epicx/express-dry");
 
 const loginDTypes = dry.body({
   username: { type: String, required: true },
