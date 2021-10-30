@@ -4,7 +4,7 @@ const css = Schema({
   approved: { type: Boolean, default: false },
   user: { type: SchemaTypes.ObjectId, ref: "user", required: true },
   base: {
-    name: { type: String, required: true },
+    name: { type: String, unique: true, required: true },
     logo: { type: String, default: "" },
     cover: { type: String, default: "" },
     description: { type: String, default: "" },

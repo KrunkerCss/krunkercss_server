@@ -67,6 +67,14 @@ router.put("/", jwt_check, allowSecondLevel, putCssDTypes, async (req, res) => {
 
     const need_approval = user.role === css_maker[0];
 
+    if (req.body.prev_name !== req.body.base.name) {
+      const exists = await CssModel.findOne({
+        "base.name": req.body.base.name,
+      });
+
+      if (exists) throw new EXISTS("Another CSS with new name");
+    }
+
     const css = await CssModel.findOneAndUpdate(
       { user: user, "base.name": req.body.prev_name },
       {
