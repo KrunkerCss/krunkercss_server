@@ -5,6 +5,7 @@ const { HandleError } = require("../utils/error");
 
 router.use("/", require("./auth"));
 router.use("/css", require("./css"));
+router.use("/request", require("./request"));
 
 router.get("/", (req, res) => {
   try {
