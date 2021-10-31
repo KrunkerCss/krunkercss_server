@@ -2,6 +2,7 @@ const { Schema, model, SchemaTypes } = require("mongoose");
 
 const css = Schema({
   approved: { type: Boolean, default: false },
+  need_action: { type: Boolean, default: false },
   user: { type: SchemaTypes.ObjectId, ref: "user", required: true },
   base: {
     name: { type: String, unique: true, required: true },
