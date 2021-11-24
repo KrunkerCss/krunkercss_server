@@ -14,7 +14,7 @@ router.post("/login", loginDTypes, async (req, res) => {
     const user = await UserModel.findOne({ username });
     if (!user) throw new NOTFOUND("user");
 
-    if (!compare(req.body.password, user.password)) {
+    if (!(await compare(req.body.password, user.password))) {
       throw new ERROR("Password not matched", 400, {
         type: "incPwd",
         value: true,
