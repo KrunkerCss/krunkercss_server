@@ -57,19 +57,21 @@ router.post(
           });
         }
       } else if (data.action_name === "disapprove") {
-        const obj = await CssModel.findById(data.action_id);
-        if (!obj) throw new NOTFOUND("CSS");
-        await CssModel.findByIdAndUpdate(data.action_id, {
-          approved: false,
-          need_action: true,
-        });
-        // Notification stuff
-        await push_n({
-          for: obj.user,
-          from: req.user.name,
-          title: `Need action for ${obj.base.name} css`,
-          reason: data.action_reason,
-        });
+        if (data.action_type === "css") {
+          const obj = await CssModel.findById(data.action_id);
+          if (!obj) throw new NOTFOUND("CSS");
+          await CssModel.findByIdAndUpdate(data.action_id, {
+            approved: false,
+            need_action: true,
+          });
+          // Notification stuff
+          await push_n({
+            for: obj.user,
+            from: req.user.name,
+            title: `Need action for ${obj.base.name} css`,
+            reason: data.action_reason,
+          });
+        }
       }
 
       return res.status(200).json({ success: true });
