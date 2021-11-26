@@ -2,6 +2,7 @@ const { Schema, model, SchemaTypes } = require("mongoose");
 
 const commission = Schema({
   approved: { type: Boolean, default: false },
+  need_action: { type: Boolean, default: false },
   user: { type: SchemaTypes.ObjectId, ref: "user", required: true },
   screenshots: [{ type: String }],
   title: { type: String, required: true },
