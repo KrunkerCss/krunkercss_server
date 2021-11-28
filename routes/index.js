@@ -4,6 +4,7 @@ const { allowAll } = require("../middlewares/role");
 const { HandleError } = require("../utils/error");
 
 router.use("/", require("./auth"));
+router.use("/user", require("./user"));
 router.use("/css", require("./css"));
 router.use("/commission", require("./commission"));
 router.use("/request", require("./request"));
