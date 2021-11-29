@@ -8,12 +8,7 @@ const postCssDTypes = dry.body(
       cover: { type: String, default: "" },
       description: { type: String, default: "" },
       screenshots: { type: Array },
-      pricing: [
-        {
-          name: { type: String, required: true },
-          price: { type: Number, default: 0 },
-        },
-      ],
+      price: { type: Number, default: 0 },
       repo: { type: String, default: "" },
       site: { type: String, default: "" },
       credits: [
@@ -43,12 +38,7 @@ const putCssDTypes = dry.body(
       cover: { type: String, default: "" },
       description: { type: String, default: "" },
       screenshots: { type: Array },
-      pricing: [
-        {
-          name: { type: String, required: true },
-          price: { type: Number, default: 0 },
-        },
-      ],
+      price: { type: Number, default: 0 },
       repo: { type: String, default: "" },
       site: { type: String, default: "" },
       credits: [
