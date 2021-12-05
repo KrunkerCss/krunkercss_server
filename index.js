@@ -7,6 +7,7 @@ const PORT = process.env.PORT || 5000;
 require("./db/init")();
 
 // Express Middlewares
+app.use(require("cors")());
 app.use(express.json());
 
 // Routes
