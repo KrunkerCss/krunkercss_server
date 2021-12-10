@@ -10,11 +10,11 @@ const router = require("express").Router();
 router.get("/", jwt_check, allowSecondLevel, async (req, res) => {
   try {
     const csses = await CssModel.find({ user: req.user.id });
-    const commisions = await CommissionModel.find({ user: req.user.id });
+    const commissions = await CommissionModel.find({ user: req.user.id });
 
     return res
       .status(200)
-      .json({ success: true, payload: { csses, commisions } });
+      .json({ success: true, payload: { csses, commissions } });
   } catch (err) {
     return HandleError(err, res);
   }
