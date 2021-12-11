@@ -13,7 +13,11 @@ const { admin, mod, css_maker } = require("../utils/role");
 
 router.get("/", async (req, res) => {
   try {
-    const css = await CssModel.find({});
+    const css = await CssModel.find({ approved: true }).populate("user", [
+      "id",
+      "username",
+      "name",
+    ]);
     return res.status(200).json({ success: true, payload: css });
   } catch (err) {
     return HandleError(err, res);
