@@ -9,8 +9,14 @@ const router = require("express").Router();
 
 router.get("/", jwt_check, allowSecondLevel, async (req, res) => {
   try {
-    const csses = await CssModel.find({ user: req.user.id });
-    const commissions = await CommissionModel.find({ user: req.user.id });
+    const csses = await CssModel.find({ user: req.user.id }).populate("user", [
+      "id",
+      "username",
+      "name",
+    ]);
+    const commissions = await CommissionModel.find({
+      user: req.user.id,
+    }).populate("user", ["id", "username", "name"]);
 
     return res
       .status(200)
