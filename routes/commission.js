@@ -126,13 +126,18 @@ router.delete(
       }).populate("user", ["username", "role"]);
       if (!commission) throw new NOTFOUND("Commission");
 
+      const commissionOwner = req.user.username === commission.user.username;
+      const isAdmin = req.user.role === admin[0];
+      const isMod = req.user.role === mod[0];
+      const isAdminCommission = commission.user.role === admin[0];
+      const isModCommission = commission.user.role === mod[0];
+
       let pass = false;
       if (
-        commission.user.role === admin[0] ||
-        commission.user.role === mod[0]
+        commissionOwner ||
+        (isAdmin && !isAdminCommission) ||
+        (isMod && !isModCommission && !isAdminCommission)
       ) {
-        pass = true;
-      } else if (commission.user.username === req.user.username) {
         pass = true;
       }
       if (!pass) throw new BAD("Request");
