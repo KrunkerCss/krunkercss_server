@@ -13,4 +13,16 @@ const jwt_check = (req, res, next) => {
   }
 };
 
-module.exports = { jwt_check };
+const jwt_partial_check = (req, res, next) => {
+  try {
+    if (!req.headers.authorization) throw new NOTFOUND("Auth Header");
+
+    const token = req.headers.authorization.split(" ")[1];
+    req.user = verfiy_access_token(token);
+    next();
+  } catch (err) {
+    next();
+  }
+};
+
+module.exports = { jwt_check, jwt_partial_check };
