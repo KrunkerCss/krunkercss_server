@@ -2,7 +2,7 @@ const router = require("express").Router();
 const { HandleError, EXISTS, NOTFOUND, BAD } = require("../utils/error");
 const CssModel = require("../db/models/css");
 const UserModel = require("../db/models/user");
-const { jwt_check } = require("../middlewares/auth");
+const { jwt_check, jwt_partial_check } = require("../middlewares/auth");
 const { allowSecondLevel } = require("../middlewares/role");
 const {
   postCssDTypes,
@@ -19,6 +19,37 @@ router.get("/", async (req, res) => {
       "name",
     ]);
     return res.status(200).json({ success: true, payload: css });
+  } catch (err) {
+    return HandleError(err, res);
+  }
+});
+
+router.get("/:name", jwt_partial_check, async (req, res) => {
+  try {
+    let query = { "base.name": req.params.name };
+    if (req.user) {
+      if (!(req.user.role === "admin" || req.user.role === "mod")) {
+        query = {
+          ...query,
+          $or: [
+            {
+              user: req.user.id,
+            },
+            {
+              approved: true,
+            },
+          ],
+        };
+      }
+    } else {
+      query = { ...query, approved: true };
+    }
+    const css = await CssModel.findOne(query).populate("user", [
+      "id",
+      "username",
+      "name",
+    ]);
+    return res.status(200).json({ success: true, css });
   } catch (err) {
     return HandleError(err, res);
   }
@@ -120,10 +151,18 @@ router.delete(
       );
       if (!css) throw new NOTFOUND("Css");
 
+      const cssOwner = req.user.username === css.user.username;
+      const isAdmin = req.user.role === admin[0];
+      const isMod = req.user.role === mod[0];
+      const isAdminCSS = css.user.role === admin[0];
+      const isModCSS = css.user.role === mod[0];
+
       let pass = false;
-      if (css.user.role === admin[0] || css.user.role === mod[0]) {
-        pass = true;
-      } else if (css.user.username === req.user.username) {
+      if (
+        cssOwner ||
+        (isAdmin && !isAdminCSS) ||
+        (isMod && !isModCSS && !isAdminCSS)
+      ) {
         pass = true;
       }
       if (!pass) throw new BAD("Request");
