@@ -62,7 +62,6 @@ const putCssDTypes = dry.body(
 const deleteCssDTypes = dry.body(
   {
     name: { type: String, require: true },
-    reason: { type: String, require: true },
   },
   { allowExtraKeys: false }
 );
